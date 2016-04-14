@@ -28,19 +28,22 @@ import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity {
     public static final String OPEN_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-    String city = "Kiev";
-    WeatherFragment weatherFragment;
+    String city = "Nairobi";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        weatherFragment.updatetheWeather(city);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new WeatherFragment())
+                    .add(R.id.container, new WeatherFragment(),"WEATHER")
                     .commit();
+
+            //WeatherFragment weatherFragment = (WeatherFragment)getSupportFragmentManager().findFragmentByTag("WEATHER");
+            //weatherFragment.
         }
     }
 
@@ -66,10 +69,10 @@ public class MainActivity extends ActionBarActivity {
             while((temp = reader.readLine())  != null){
                 buffer.append(temp).append("\n");
                 //close the buffered reader
-                reader.close();
+                //reader.close();
             }
              data = new JSONObject(buffer.toString());
-            //supposed to return 200 as all successful get requests do
+            //supposed to return 200 as all successful GET requests do
             if (data.getInt("cod") != 200){
                 return null;
             }
@@ -83,6 +86,7 @@ public class MainActivity extends ActionBarActivity {
         }
         return data;
         }
+
 
 
 
@@ -128,23 +132,24 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            String city = "Nairobi";
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             cityField =(TextView)rootView.findViewById(R.id.city_field);
             updatedField =(TextView)rootView.findViewById(R.id.updated_field);
             detailsField =(TextView)rootView.findViewById(R.id.details_field);
             currentTemperatureField =(TextView)rootView.findViewById(R.id.current_temperature_field);
             weatherIcon =(TextView)rootView.findViewById(R.id.weather_icon);
-
+            updatetheWeather(city);
 
             return rootView;
         }
 
-
-        private void  updatetheWeather(final String  city) {
+        public void  updatetheWeather(final String  city) {
             //run this on a new thread to lighten the load on the main thread
+            //UI thread skips 32 frames so it seems we need to do more of the work in background
             new Thread(){
                 public void run(){
-            final JSONObject jObj = MainActivity.fetchJSON(getActivity(),city);
+                    final JSONObject jObj = MainActivity.fetchJSON(getActivity(),city);
                     if(jObj == null){
                         handler.post(new Runnable(){
                             public void run(){
@@ -164,15 +169,15 @@ public class MainActivity extends ActionBarActivity {
             }.start();
         }
 
-        private void displayWeather(JSONObject jObj) {
+        public void displayWeather(JSONObject jObj) {
             try{
                 cityField.setText( jObj.getString("name").toUpperCase(Locale.ENGLISH) + ", " +
-                jObj.getJSONObject("sys").getString("country"));
+                        jObj.getJSONObject("sys").getString("country"));
 
                 JSONObject weather = jObj.getJSONArray("weather").getJSONObject(0);
                 JSONObject main = jObj.getJSONObject("main");
                 detailsField.setText(weather.getString("description").toUpperCase(Locale.ENGLISH) + "\n"
-                + "Humidity : " + main.getString("humidity") + "%" + "\n" );
+                        + "Humidity : " + main.getString("humidity") + "%" + "\n" );
 
                 currentTemperatureField.setText(String.format("%.2f",main.getDouble("temp")) + "C");
                 //display date weather info was last updated on
@@ -180,11 +185,15 @@ public class MainActivity extends ActionBarActivity {
                 String updatedOn = dateFormat.format(new Date(jObj.getLong("dt")*1000));
                 updatedField.setText(updatedOn);
 
+                //display weather icon too
+
+
 
             }
             catch(Exception e){
 
             }
+
 
         }
     }
