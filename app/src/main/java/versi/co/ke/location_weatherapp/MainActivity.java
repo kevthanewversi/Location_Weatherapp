@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -20,15 +21,20 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 
 
 public class MainActivity extends ActionBarActivity {
     public static final String OPEN_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
+    String city = "Kiev";
+    WeatherFragment weatherFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        weatherFragment.updatetheWeather(city);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new WeatherFragment())
@@ -36,12 +42,13 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public static JSONObject fetchJSon( Context context,String city){
+
+    public static JSONObject fetchJSON( Context context,String city){
         JSONObject data = new JSONObject();
 
         try{
             //append location info to url
-            URL url = new URL (new StringBuilder(OPEN_WEATHER_URL).append(city).toString());
+             URL url = new URL (new StringBuilder(OPEN_WEATHER_URL).append(city).toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             //add api key to url
             conn.addRequestProperty("x-api-key",
@@ -105,7 +112,7 @@ public class MainActivity extends ActionBarActivity {
      */
     public static class WeatherFragment extends Fragment {
 
-        Handler handler
+        Handler handler;
         TextView cityField;
         TextView updatedField;
         TextView detailsField;
@@ -128,6 +135,42 @@ public class MainActivity extends ActionBarActivity {
 
 
             return rootView;
+        }
+
+
+        private void  updatetheWeather(final String  city) {
+            //run this on a new thread to lighten the load on the main thread
+            new Thread(){
+                public void run(){
+            final JSONObject jObj = MainActivity.fetchJSON(getActivity(),city);
+                    if(jObj == null){
+                        handler.post(new Runnable(){
+                            public void run(){
+                                Toast.makeText(getActivity(),
+                                        getActivity().getString(R.string.place_not_found),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        handler.post(new Runnable(){
+                            public void run(){
+                                renderWeather(jObj);
+                            }
+                        });
+                    }
+                }
+            }.start();
+        }
+
+        private void renderWeather(JSONObject jObj) {
+            try{
+                cityField.setText( jObj.getString("name").toUpperCase(Locale.ENGLISH) + ", " +
+                jObj.getJSONObject("sys").getString("country"));
+            }
+            catch(Exception e){
+
+            }
+
         }
     }
 }
