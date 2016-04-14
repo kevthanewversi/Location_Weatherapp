@@ -21,6 +21,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -154,7 +156,7 @@ public class MainActivity extends ActionBarActivity {
                     } else {
                         handler.post(new Runnable(){
                             public void run(){
-                                renderWeather(jObj);
+                                displayWeather(jObj);
                             }
                         });
                     }
@@ -162,10 +164,23 @@ public class MainActivity extends ActionBarActivity {
             }.start();
         }
 
-        private void renderWeather(JSONObject jObj) {
+        private void displayWeather(JSONObject jObj) {
             try{
                 cityField.setText( jObj.getString("name").toUpperCase(Locale.ENGLISH) + ", " +
                 jObj.getJSONObject("sys").getString("country"));
+
+                JSONObject weather = jObj.getJSONArray("weather").getJSONObject(0);
+                JSONObject main = jObj.getJSONObject("main");
+                detailsField.setText(weather.getString("description").toUpperCase(Locale.ENGLISH) + "\n"
+                + "Humidity : " + main.getString("humidity") + "%" + "\n" );
+
+                currentTemperatureField.setText(String.format("%.2f",main.getDouble("temp")) + "C");
+                //display date weather info was last updated on
+                DateFormat dateFormat = DateFormat.getDateTimeInstance();
+                String updatedOn = dateFormat.format(new Date(jObj.getLong("dt")*1000));
+                updatedField.setText(updatedOn);
+
+
             }
             catch(Exception e){
 
