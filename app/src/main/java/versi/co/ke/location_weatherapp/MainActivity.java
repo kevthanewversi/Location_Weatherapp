@@ -3,7 +3,6 @@ package versi.co.ke.location_weatherapp;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,17 +111,16 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
+    //I preffered working with an in class fragment instead of an external fragment
+    //for simplicity purposes
     public static class WeatherFragment extends Fragment {
 
+        //it's a support fragment(app.v4) to support older devices
         Handler handler;
         TextView cityField;
         TextView updatedField;
         TextView detailsField;
-        TextView currentTemperatureField;
-        TextView weatherIcon;
+        TextView TemperatureField;
 
         public WeatherFragment() {
             handler = new Handler();
@@ -137,8 +134,7 @@ public class MainActivity extends ActionBarActivity {
             cityField =(TextView)rootView.findViewById(R.id.city_field);
             updatedField =(TextView)rootView.findViewById(R.id.updated_field);
             detailsField =(TextView)rootView.findViewById(R.id.details_field);
-            currentTemperatureField =(TextView)rootView.findViewById(R.id.current_temperature_field);
-            weatherIcon =(TextView)rootView.findViewById(R.id.weather_icon);
+            TemperatureField =(TextView)rootView.findViewById(R.id.current_temperature_field);
             updatetheWeather(city);
 
             return rootView;
@@ -146,8 +142,8 @@ public class MainActivity extends ActionBarActivity {
 
         public void  updatetheWeather(final String  city) {
             //run this on a new thread to lighten the load on the main thread
-            //UI thread skips 32 frames so it seems we need to do more of the work in background
             new Thread(){
+                //UI thread skips 32 frames so it seems we need to do more of the work in background
                 public void run(){
                     final JSONObject jObj = MainActivity.fetchJSON(getActivity(),city);
                     if(jObj == null){
@@ -173,21 +169,19 @@ public class MainActivity extends ActionBarActivity {
             try{
                 cityField.setText( jObj.getString("name").toUpperCase(Locale.ENGLISH) + ", " +
                         jObj.getJSONObject("sys").getString("country"));
-
+                //the weather tag is an array in the JSON file containing several elements (JSON objects)
                 JSONObject weather = jObj.getJSONArray("weather").getJSONObject(0);
                 JSONObject main = jObj.getJSONObject("main");
                 detailsField.setText(weather.getString("description").toUpperCase(Locale.ENGLISH) + "\n"
                         + "Humidity : " + main.getString("humidity") + "%" + "\n" );
 
-                currentTemperatureField.setText(String.format("%.2f",main.getDouble("temp")) + "C");
-                //display date weather info was last updated on
+                TemperatureField.setText(String.format("%.2f",main.getDouble("temp")) + "C");
+                //display the date weather info was last updated on
                 DateFormat dateFormat = DateFormat.getDateTimeInstance();
+                //jObj.getLong  fetches the date and timeinfo from the virtual json file
                 String updatedOn = dateFormat.format(new Date(jObj.getLong("dt")*1000));
+                //set the date and time info to a text field
                 updatedField.setText(updatedOn);
-
-                //display weather icon too
-
-
 
             }
             catch(Exception e){
