@@ -3,6 +3,9 @@ package versi.co.ke.location_weatherapp;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -20,18 +23,22 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends ActionBarActivity {
     public static final String OPEN_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     String city = "Nairobi";
+    Double longitude,latitude;
+    LocationListener locationListener;
 
 
     @Override
@@ -79,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     //the callback method that checks if the user conformed to the app's ACCESS_FINE_LOCATION permission request
-    //here you can a suitable action based on the whether the usr granted the permission or not
+    //here you can a suitable action based on the whether the user granted the permission or not
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -157,6 +164,48 @@ public class MainActivity extends ActionBarActivity {
 
        String city = null;
 
+       LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+       locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000,10,locationListener);
+       final Location myLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+       longitude = myLocation.getLongitude();
+       latitude = myLocation.getLatitude();
+
+       ///call Async task to get city location
+       Location_AsyncTask location_asyncTask = new Location_AsyncTask(MainActivity.this,longitude,latitude);
+       location_asyncTask.execute();
+       try {
+           city = location_asyncTask.get().toString();
+       }
+       catch (InterruptedException e) {
+           e.printStackTrace();
+       } catch (ExecutionException e) {
+           e.printStackTrace();
+       }
+
+
+       locationListener = new LocationListener() {
+           @Override
+           public void onLocationChanged(Location location) {
+               longitude = myLocation.getLongitude();
+               latitude = myLocation.getLatitude();
+           }
+
+
+           @Override
+           public void onStatusChanged(String s, int i, Bundle bundle) {
+
+           }
+
+           @Override
+           public void onProviderEnabled(String s) {
+
+           }
+
+           @Override
+           public void onProviderDisabled(String s) {
+
+           }
+       };
 
 
        return city;
