@@ -36,9 +36,7 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends ActionBarActivity {
     public static final String OPEN_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
-    String city = "Nairobi";
-    Double longitude,latitude;
-    LocationListener locationListener;
+
 
 
     @Override
@@ -49,77 +47,15 @@ public class MainActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new WeatherFragment(),"WEATHER")
+                    .add(R.id.container, new WeatherFragment(), "WEATHER")
                     .commit();
 
             //WeatherFragment weatherFragment = (WeatherFragment)getSupportFragmentManager().findFragmentByTag("WEATHER");
             //weatherFragment.
         }
 
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
-                // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
-
 
     }
-
-    //the callback method that checks if the user conformed to the app's ACCESS_FINE_LOCATION permission request
-    //here you can a suitable action based on the whether the user granted the permission or not
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-
-                    try{
-                        getcurrentLocation();
-                    }
-
-                    catch(Exception e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
-
 
     public static JSONObject fetchJSON( Context context,String city){
         JSONObject data = new JSONObject();
@@ -160,56 +96,6 @@ public class MainActivity extends ActionBarActivity {
         return data;
         }
 
-   public String  getcurrentLocation (){
-
-       String city = null;
-
-       LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-       locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000,10,locationListener);
-       final Location myLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-       longitude = myLocation.getLongitude();
-       latitude = myLocation.getLatitude();
-
-       ///call Async task to get city location
-       Location_AsyncTask location_asyncTask = new Location_AsyncTask(MainActivity.this,longitude,latitude);
-       location_asyncTask.execute();
-       try {
-           city = location_asyncTask.get().toString();
-       }
-       catch (InterruptedException e) {
-           e.printStackTrace();
-       } catch (ExecutionException e) {
-           e.printStackTrace();
-       }
-
-
-       locationListener = new LocationListener() {
-           @Override
-           public void onLocationChanged(Location location) {
-               longitude = myLocation.getLongitude();
-               latitude = myLocation.getLatitude();
-           }
-
-
-           @Override
-           public void onStatusChanged(String s, int i, Bundle bundle) {
-
-           }
-
-           @Override
-           public void onProviderEnabled(String s) {
-
-           }
-
-           @Override
-           public void onProviderDisabled(String s) {
-
-           }
-       };
-
-
-       return city;
-    }
 
 
 
@@ -239,7 +125,7 @@ public class MainActivity extends ActionBarActivity {
 
     //I preffered working with an in class fragment instead of an external fragment
     //for simplicity purposes
-    public static class WeatherFragment extends Fragment {
+    public class WeatherFragment extends Fragment {
 
         //it's a support fragment(app.v4) to support older devices
         Handler handler;
@@ -247,6 +133,9 @@ public class MainActivity extends ActionBarActivity {
         TextView updatedField;
         TextView detailsField;
         TextView TemperatureField;
+        //String city = "Nairobi";
+        Double longitude,latitude;
+        LocationListener locationListener;
 
         public WeatherFragment() {
             handler = new Handler();
@@ -264,6 +153,127 @@ public class MainActivity extends ActionBarActivity {
             updatetheWeather(city);
 
             return rootView;
+        }
+
+        public void onViewCreated(View view, Bundle savedInstanceState)
+        {
+            if (ContextCompat.checkSelfPermission(MainActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                    // Show an expanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+
+                } else {
+
+                    // No explanation needed, we can request the permission.
+
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.READ_CONTACTS},
+                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+                    // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
+            }
+
+
+        }
+
+        //the callback method that checks if the user conformed to the app's ACCESS_FINE_LOCATION permission request
+        //here you can a suitable action based on the whether the user granted the permission or not
+        @Override
+        public void onRequestPermissionsResult(int requestCode,
+                                               String permissions[], int[] grantResults) {
+            switch (requestCode) {
+                case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                    // If request is cancelled, the result arrays are empty.
+                    if (grantResults.length > 0
+                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                        // permission was granted, yay! Do the
+                        // location-related task you need to do.
+
+                        try{
+                            getcurrentLocation();
+                        }
+
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+
+                        // permission denied, boo! Disable the
+                        // functionality that depends on this permission.
+                    }
+                    return;
+                }
+
+                // other 'case' lines to check for other
+                // permissions this app might request
+            }
+        }
+
+
+
+
+        public String  getcurrentLocation (){
+
+            String city = null;
+
+            LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000,10,locationListener);
+            final Location myLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            longitude = myLocation.getLongitude();
+            latitude = myLocation.getLatitude();
+
+            ///call Async task to get city location
+            Location_AsyncTask location_asyncTask = new Location_AsyncTask(getActivity(),longitude,latitude);
+            location_asyncTask.execute();
+            try {
+                //get the city location from the asyncTask result
+                city = location_asyncTask.get().toString();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    longitude = myLocation.getLongitude();
+                    latitude = myLocation.getLatitude();
+                }
+
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            };
+
+
+            return city;
         }
 
         public void  updatetheWeather(final String  city) {
