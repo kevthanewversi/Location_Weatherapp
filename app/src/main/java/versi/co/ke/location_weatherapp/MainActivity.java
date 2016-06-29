@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -144,26 +145,24 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            String city = "Nairobi";
+            //String city = "Nairobi";
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             cityField =(TextView)rootView.findViewById(R.id.city_field);
             updatedField =(TextView)rootView.findViewById(R.id.updated_field);
             detailsField =(TextView)rootView.findViewById(R.id.details_field);
             TemperatureField =(TextView)rootView.findViewById(R.id.current_temperature_field);
-            updatetheWeather(city);
 
-            return rootView;
-        }
+            //updatetheWeather(city);
 
-        public void onViewCreated(View view, Bundle savedInstanceState)
-        {
             if (ContextCompat.checkSelfPermission(MainActivity.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
 
+
                 // Should we show an explanation?
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    Log.e("MM","nAIROOOOOO");
 
                     // Show an expanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
@@ -172,9 +171,8 @@ public class MainActivity extends ActionBarActivity {
                 } else {
 
                     // No explanation needed, we can request the permission.
-
-                    ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[]{Manifest.permission.READ_CONTACTS},
+                    Log.e("MM","nAIROOOOOO1");
+                   requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
                     // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
@@ -183,8 +181,15 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
 
-
+            return rootView;
         }
+
+//        public void onViewCreated(View view, Bundle savedInstanceState)
+//        {
+//
+//
+//
+//        }
 
         //the callback method that checks if the user conformed to the app's ACCESS_FINE_LOCATION permission request
         //here you can a suitable action based on the whether the user granted the permission or not
@@ -200,26 +205,44 @@ public class MainActivity extends ActionBarActivity {
                         // permission was granted, yay! Do the
                         // location-related task you need to do.
 
-                        try{
-                            getcurrentLocation();
-                        }
+                        try {
+                            String city = getcurrentLocation().toString();
+                            Log.e("MM", city);
+                            updatetheWeather(city);
 
-                        catch(Exception e) {
+
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-
-                    } else {
-
-                        // permission denied, boo! Disable the
-                        // functionality that depends on this permission.
                     }
-                    return;
-                }
 
-                // other 'case' lines to check for other
-                // permissions this app might request
+                    //if permission denied show an explanation
+                    else if (grantResults.length > 0
+                                && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+
+                            // permission was granted, yay! Do the
+                            // location-related task you need to do.
+
+                            try {
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        } else {
+
+                            // permission denied, boo! Disable the
+                            // functionality that depends on this permission.
+                        }
+                        return;
+                    }
+
+                    // other 'case' lines to check for other
+                    // permissions this app might request
+                }
             }
-        }
+
 
 
 
