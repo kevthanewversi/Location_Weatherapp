@@ -160,6 +160,7 @@ public class MainActivity extends ActionBarActivity {
 
 
                 // Should we show an explanation?
+                //returns true if user has not been shown dialog before
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION)) {
                     Log.e("MM","nAIROOOOOO");
@@ -205,44 +206,30 @@ public class MainActivity extends ActionBarActivity {
                         // permission was granted, yay! Do the
                         // location-related task you need to do.
 
-                        try {
+                        try{
                             String city = getcurrentLocation().toString();
-                            Log.e("MM", city);
+                            Log.e("MM",city);
                             updatetheWeather(city);
 
 
-                        } catch (Exception e) {
+                        }
+
+                        catch(Exception e) {
                             e.printStackTrace();
                         }
+
+                    } else {
+
+                        // permission denied, boo! Disable the
+                        // functionality that depends on this permission.
                     }
-
-                    //if permission denied show an explanation
-                    else if (grantResults.length > 0
-                                && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-
-                            // permission was granted, yay! Do the
-                            // location-related task you need to do.
-
-                            try {
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        } else {
-
-                            // permission denied, boo! Disable the
-                            // functionality that depends on this permission.
-                        }
-                        return;
-                    }
-
-                    // other 'case' lines to check for other
-                    // permissions this app might request
+                    return;
                 }
-            }
 
+                // other 'case' lines to check for other
+                // permissions this app might request
+            }
+        }
 
 
 
