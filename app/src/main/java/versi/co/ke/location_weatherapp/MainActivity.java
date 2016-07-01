@@ -159,7 +159,7 @@ public class MainActivity extends ActionBarActivity {
                     != PackageManager.PERMISSION_GRANTED) {
 
 
-                // Should we show an explanation?
+                // Should we show an open_weather_app_IDn explanation?
                 //returns true if user has not been shown dialog before
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -168,13 +168,16 @@ public class MainActivity extends ActionBarActivity {
                     // Show an expanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
+
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
                     
 
                 } else {
 
                     // No explanation needed, we can request the permission.
                     Log.e("MM","nAIROOOOOO1");
-                   requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
                     // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
