@@ -144,6 +144,7 @@ public class MainActivity extends ActionBarActivity {
             handler = new Handler();
         }
 
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -264,24 +265,10 @@ public class MainActivity extends ActionBarActivity {
             String city = null;
 
             LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000,10,locationListener);
-            final Location myLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-            longitude = myLocation.getLongitude();
-            latitude = myLocation.getLatitude();
+            final Location myLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-            ///call Async task to get city location
-            Location_AsyncTask location_asyncTask = new Location_AsyncTask(getActivity(),longitude,latitude);
-            location_asyncTask.execute();
-            try {
-                //get the city location from the asyncTask result
-                city = location_asyncTask.get().toString();
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
+            if (myLocation == null){
+                Log.e("kev","LUV");}
 
             locationListener = new LocationListener() {
                 @Override
@@ -306,6 +293,28 @@ public class MainActivity extends ActionBarActivity {
 
                 }
             };
+
+
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,2000,10,locationListener);
+            longitude = myLocation.getLongitude();
+            latitude = myLocation.getLatitude();
+
+            ///call Async task to get city location
+            Location_AsyncTask location_asyncTask = new Location_AsyncTask(getActivity(),longitude,latitude);
+            location_asyncTask.execute();
+            try {
+                //get the city location from the asyncTask result
+                city = location_asyncTask.get().toString();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+
+
 
 
             return city;
