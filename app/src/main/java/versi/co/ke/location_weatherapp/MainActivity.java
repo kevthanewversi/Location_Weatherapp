@@ -64,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
 
         try{
             //append location info to url
-             URL url = new URL (new StringBuilder(OPEN_WEATHER_URL).append(city).toString());
+            URL url = new URL (new StringBuilder(OPEN_WEATHER_URL).append(city).toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             //add api key to url
             conn.addRequestProperty("x-api-key",
@@ -76,19 +76,19 @@ public class MainActivity extends ActionBarActivity {
             StringBuffer buffer = new StringBuffer();
             String temp = " ";
 
-           //loop through the reader while adding the data to a string
+            //loop through the reader while adding the data to a string
             while((temp = reader.readLine())  != null){
                 buffer.append(temp).append("\n");
                 //close the buffered reader
                 //reader.close();
             }
-             data = new JSONObject(buffer.toString());
+            data = new JSONObject(buffer.toString());
             //supposed to return 200 as all successful GET requests do
             if (data.getInt("cod") != 200){
                 return null;
             }
 
-            }
+        }
 
 
 
@@ -96,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
         return data;
-        }
+    }
 
 
 
@@ -155,57 +155,66 @@ public class MainActivity extends ActionBarActivity {
 
             //updatetheWeather(city);
 
-            if (ContextCompat.checkSelfPermission(MainActivity.this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
+            //check if Build version is greater than API 22
+            //before requesting runtime permissions
+            if (Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP_MR1) {
+
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
 
 
-                // Should we show an open_weather_app_IDn explanation?
-                //returns true if user has not been shown dialog before
-                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    Log.e("MM","nAIROOOOOO");
+                    // Should we show an open_weather_app_IDn explanation?
+                    //returns true if user has not been shown dialog before
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        Log.e("MM", "nAIROOOOOO");
 
-                    // Show an expanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
-                    Snackbar snackbar = Snackbar.make(rootView,R.string.explanation,Snackbar.LENGTH_SHORT).
-                            setAction(R.string.request,new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ActivityCompat.requestPermissions(MainActivity.this,
-                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-                        }
-                    });
-                    snackbar.show();
+                        // Show an expanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                        Snackbar snackbar = Snackbar.make(rootView, R.string.explanation, Snackbar.LENGTH_SHORT).
+                                setAction(R.string.request, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        ActivityCompat.requestPermissions(MainActivity.this,
+                                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                                    }
+                                });
+                        snackbar.show();
 
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-                    
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
-                } else {
 
-                    // No explanation needed, we can request the permission.
-                    Log.e("MM","nAIROOOOOO1");
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    } else {
 
-                    // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
+                        // No explanation needed, we can request the permission.
+                        Log.e("MM", "nAIROOOOOO1");
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+                        // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
                 }
+            }
+
+            else {
+                try{String city = getcurrentLocation().toString();
+                    Log.e("MM",city);
+                updatetheWeather(city);
+                }
+               catch(Exception e) {
+                   e.printStackTrace();
+               }
             }
 
             return rootView;
         }
 
-//        public void onViewCreated(View view, Bundle savedInstanceState)
-//        {
-//
-//
-//
-//        }
 
         //the callback method that checks if the user conformed to the app's ACCESS_FINE_LOCATION permission request
         //here you can a suitable action based on the whether the user granted the permission or not

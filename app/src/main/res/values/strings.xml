@@ -5,7 +5,7 @@
 
     <string name="open_weather_app_ID">82b7736d7190b30ce74bd3127ad5bba8</string>
     <string name="request">OK</string>
-    <string name="explanation">Location permissions are needed to get your current location and it's weather</string>
+    <string name="explanation">Location permissions are needed to get your current location and weather</string>
 
     <string name="weather_sunny">&#xf00d;</string>
     <string name="weather_clear_night">&#xf02e;</string>
