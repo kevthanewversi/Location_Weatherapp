@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.support.v4.app.FragmentManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +18,9 @@ public class Location_AsyncTask  extends AsyncTask<String,String,String>{
     Activity activity;
     double longitude;
     double latitude;
+    WeatherFragment weatherFragment;
+
+
 
 
     public Location_AsyncTask(Activity activity,double longitude,double latitude) {
@@ -31,6 +36,7 @@ public class Location_AsyncTask  extends AsyncTask<String,String,String>{
         Geocoder geocoder = new Geocoder(activity, Locale.ENGLISH);
 
         try{
+            Log.e("bad","bitvh");
             List<Address> list = geocoder.getFromLocation(latitude,longitude,1);
             if (list !=null & list.size()>0){
                 Address address = list.get(0);
@@ -47,6 +53,8 @@ public class Location_AsyncTask  extends AsyncTask<String,String,String>{
     @Override
     protected void onPostExecute(String city) {
         super.onPostExecute(city);
+        Log.e("city",city);
+        weatherFragment.updatetheWeather(city);
 
     }
 }

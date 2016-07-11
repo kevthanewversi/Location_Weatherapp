@@ -18,4 +18,7 @@
     <string name="weather_drizzle">&#xf01c;</string>
 
     <string name="place_not_found"> Sorry weather for this location not found</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -85,16 +85,56 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="recyclerview-v7-23.1.0" level="project" />
-    <orderEntry type="library" exported="" name="play-services-maps-9.0.1" level="project" />
-    <orderEntry type="library" exported="" name="play-services-basement-9.0.1" level="project" />
-    <orderEntry type="library" exported="" name="play-services-base-9.0.1" level="project" />
-    <orderEntry type="library" exported="" name="play-services-tasks-9.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-23.1.0" level="project" />
-    <orderEntry type="library" exported="" name="design-23.1.0" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-23.1.0" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-23.1.0" level="project" />
-    <orderEntry type="library" exported="" name="firebase-common-9.0.1" level="project" />
+    <orderEntry type="library" exported="" name="play-services-base-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-database-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-wearable-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-storage-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-drive-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-23.0.1" level="project" />
+    <orderEntry type="library" exported="" name="play-services-tagmanager-api-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-common-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-iid-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-vision-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-wallet-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-cast-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-messaging-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-gcm-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-maps-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-auth-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-analytics-impl-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-tasks-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="design-23.0.1" level="project" />
+    <orderEntry type="library" exported="" name="play-services-panorama-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-config-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-database-connection-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-analytics-impl-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-auth-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-appinvite-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-ads-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-location-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-ads-lite-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-fitness-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-nearby-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-auth-module-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-plus-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-storage-common-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-appindexing-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-auth-common-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-identity-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-23.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-23.0.1" level="project" />
+    <orderEntry type="library" exported="" name="play-services-games-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-auth-base-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-basement-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-iid-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-analytics-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="mediarouter-v7-23.0.0" level="project" />
+    <orderEntry type="library" exported="" name="multidex-1.0.0" level="project" />
+    <orderEntry type="library" exported="" name="firebase-crash-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-safetynet-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-analytics-9.0.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-tagmanager-9.0.2" level="project" />
   </component>
 </module>
 
